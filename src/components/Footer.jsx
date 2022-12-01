@@ -1,17 +1,23 @@
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { AiOutlineLogout } from "react-icons/ai";
 import { MdSend } from "react-icons/md";
 import { userSliceActions } from "../redux/slices/UserSlice";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 function Footer({ socket }) {
   const userId = useSelector((state) => state.userDetails.userId);
+  const [locked, setLocked] = useState(false);
   const dispatch = useDispatch();
   const msgRef = useRef();
   const submitHandler = async (e) => {
+    setLocked(true);
     e.preventDefault();
-    if (!msgRef.current.value) return;
+    if (!msgRef.current.value) {
+      setLocked(false);
+      return;
+    }
     try {
       const name = window.localStorage.getItem("s_name");
       const result = await axios.post(
@@ -30,9 +36,11 @@ function Footer({ socket }) {
           msgId: result.data.insertedId,
         });
         msgRef.current.value = "";
+        setLocked(false);
       }
     } catch (err) {
-      console.log(err);
+      setLocked(false);
+      toast.error("Something went wrong :(");
     }
   };
   return (
@@ -47,7 +55,11 @@ function Footer({ socket }) {
           placeholder="enter message"
           className="flex-1 px-5 py-1 rounded-full bg-transparent border border-blue-500 text-white outline-none"
         />
-        <button type="submit" className="outline-none lg:mr-5">
+        <button
+          type="submit"
+          className="outline-none lg:mr-5"
+          disabled={locked}
+        >
           <MdSend className="text-blue-500 w-5 h-5" />
         </button>
         <button

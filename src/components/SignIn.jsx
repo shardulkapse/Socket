@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { userSliceActions } from "../redux/slices/UserSlice";
@@ -8,10 +8,13 @@ function SignIn({ setActiveForm }) {
   const emailRef = useRef();
   const passwordRef = useRef();
   const nameRef = useRef();
+  const [locked, setLocked] = useState(false);
+
   const dispatch = useDispatch();
 
   const submitHandler = async (e) => {
     e.preventDefault();
+    setLocked(true);
     try {
       const result = await axios.post(
         "https://socket-node.onrender.com/signin",
@@ -33,6 +36,7 @@ function SignIn({ setActiveForm }) {
       }
     } catch (err) {
       toast.error(err.response.data.message);
+      setLocked(false);
     }
   };
 
@@ -65,6 +69,7 @@ function SignIn({ setActiveForm }) {
       />
       <button
         type="submit"
+        disabled={locked}
         className="px-5 py-2 bg-blue-900/30 hover:bg-blue-900 duration-500 ease-in-out w-32 rounded-xs"
       >
         sign in
