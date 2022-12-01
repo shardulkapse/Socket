@@ -12,10 +12,13 @@ function Login({ setActiveForm }) {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post("http://localhost:8000/login", {
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
-      });
+      const result = await axios.post(
+        "https://socket-node.onrender.com/login",
+        {
+          email: emailRef.current.value,
+          password: passwordRef.current.value,
+        }
+      );
       if (result.status === 200) {
         dispatch(
           userSliceActions.logUserIn({

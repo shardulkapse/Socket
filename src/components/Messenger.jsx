@@ -15,7 +15,7 @@ function Messenger() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    socket.current = io("ws://localhost:8000");
+    socket.current = io("https://socket-node.onrender.com");
     socket.current.on("getMessage", (data) => {
       setNewMsg(data);
     });
@@ -32,7 +32,7 @@ function Messenger() {
 
   useEffect(() => {
     (async () => {
-      const result = await axios.get(`http://localhost:8000/getMsg`);
+      const result = await axios.get(`https://socket-node.onrender.com/getMsg`);
       if (result.status === 200) {
         setMessages(result.data);
         setLoading(false);

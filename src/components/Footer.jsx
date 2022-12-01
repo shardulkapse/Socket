@@ -14,11 +14,14 @@ function Footer({ socket }) {
     if (!msgRef.current.value) return;
     try {
       const name = window.localStorage.getItem("s_name");
-      const result = await axios.post("http://localhost:8000/addMsg", {
-        text: msgRef.current.value,
-        senderId: userId,
-        senderName: name,
-      });
+      const result = await axios.post(
+        "https://socket-node.onrender.com/addMsg",
+        {
+          text: msgRef.current.value,
+          senderId: userId,
+          senderName: name,
+        }
+      );
       if (result.status === 200) {
         socket.current.emit("sendMessage", {
           senderId: userId,

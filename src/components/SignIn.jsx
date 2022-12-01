@@ -13,11 +13,14 @@ function SignIn({ setActiveForm }) {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const result = await axios.post("http://localhost:8000/signin", {
-        email: emailRef.current.value,
-        password: passwordRef.current.value,
-        name: nameRef.current.value,
-      });
+      const result = await axios.post(
+        "https://socket-node.onrender.com/signin",
+        {
+          email: emailRef.current.value,
+          password: passwordRef.current.value,
+          name: nameRef.current.value,
+        }
+      );
       if (result.status === 200) {
         dispatch(
           userSliceActions.logUserIn({
